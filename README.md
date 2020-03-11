@@ -2,14 +2,16 @@
 
 
 1 Objectivos e Organização
+
 Este trabalho prático tem como principais objectivos:
+
 • aumentar a experiência de uso do ambiente Linux e de algumas ferramentas de apoio à programação;
 • aumentar a capacidade de escrever Expressões Regulares (ER) para descrição de padrões de frases;
 • desenvolver, a partir de ERs, sistemática e automaticamente Processadores de Linguagens Regulares, que 􏰂ltrem ou transformem textos com base no conceito de regras de produção Condição-Ação;
 • utilizar o Flex para gerar 􏰂ltros de texto em C.
 Neste TP que se pretende que seja resolvido rapidamente (2 semana). Aprecia-se a imaginação/criatividade dos grupos
 ao incluir outros processamentos!
-Deve entregar a sua solução até Domingo dia 22 de Março. O 􏰂cheiro com o relatório e a solução deve ter o nome 'pl19TP1GrNN' 􏰁 em breve serão dadas indicações precisas sobre a forma de submissão.
+Deve entregar a sua solução até Domingo dia 5 de Abril. O 􏰂ficheiro com o relatório e a solução deve ter o nome 'pl19TP1GrNN' 􏰁 em breve serão dadas indicações precisas sobre a forma de submissão.
 O programa desenvolvido será apresentado aos membros da equipa docente, totalmente pronto e a funcionar (acom- panhado do respectivo relatório de desenvolvimento) e será defendido por todos os elementos do grupo, em data a marcar.
 O relatório a elaborar, deve ser claro e, além do respectivo enunciado, da descrição do problema, das decisões que lideraram o desenho da solução e sua implementação (incluir a especi􏰂cação FLex), deverá conter exemplos de utilização (textos fontes diversos e respectivo resultado produzido). Como é de tradição, o relatório será escrito em LATEX.
 
