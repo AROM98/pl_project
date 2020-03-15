@@ -3,10 +3,10 @@
 finalx: lex.yy.c
 	gcc -o finalx lex.yy.c -ll
 
-lex.yy.c: file1.l
-	flex file1.l
+lex.yy.c: base.l
+	flex base.l
 
 clean:
-	rm lex.yy.c finalx *.o
+	rm lex.yy.c finalx
 
 
