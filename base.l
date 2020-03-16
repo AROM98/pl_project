@@ -14,8 +14,10 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
 <meta>=== {printf("vou sair de meta e voltar ao inicio\n"); BEGIN 0;}
 <meta>email:\ ([a-z0-9]+\.)*[a-z0-9]+@([a-z0-9]+\.)+[a-z]+ {email =  yytext+7; 
                                                             printf("seu email é: %s\n", email);}
-<meta>autor:\ 
+<meta>author:\ ([a-zA-Z|ç|ã|á|à|â|é]+(\.|\ )*)+ {nome = yytext+8;
+                                            printf("o autor é: %s\n", nome);}
 <meta>.|\n ;
+
 
 <tree>=== {printf("vou sair de tree e voltar ao inicio\n"); BEGIN 0;}
 <tree>.|\n ;
