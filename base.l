@@ -1,4 +1,7 @@
 %{
+#include <string.h>
+char* email;
+char* nome;
 
 %}
 %x meta tree makefile filemd filelex
@@ -9,6 +12,9 @@ meta {printf("entrei no estado meta\n"); BEGIN meta;}
 tree {printf("entrei no estado tree\n"); BEGIN tree;}
 
 <meta>=== {printf("vou sair de meta e voltar ao inicio\n"); BEGIN 0;}
+<meta>email:\ ([a-z0-9]+\.)*[a-z0-9]+@([a-z0-9]+\.)+[a-z]+ {email =  yytext+7; 
+                                                            printf("seu email é: %s\n", email);}
+<meta>autor:\ 
 <meta>.|\n ;
 
 <tree>=== {printf("vou sair de tree e voltar ao inicio\n"); BEGIN 0;}
