@@ -2,12 +2,17 @@
 #define _ HEAD 1
 
 //estas definiçoes aqui é um exemplo de como podemos usar
-#define OP 100
-#define AP 101
-#define FP 102
-#define INT 103
-#define ERRO 104
+#define CREATMD 100
+#define CREATDIR 101
+#define CREATFL 102
+#define CREATMAKE 103
+#define CREATREADME 104
 
+//vars partilhadas
+char* nomefinal;
+char* email;
+char* autor;
+char buffer[1000];
 
 
 #endif
