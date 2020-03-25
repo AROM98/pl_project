@@ -13,6 +13,7 @@ extern int yylex();
 int main (int argc, char* argv[]){
     nomefinal = strdup(argv[1]);
     int dica;
+    char* dir1, dir2, dir3;
     //no qual argv[1] será o nome do projecto a criar
     // e argv[2] será o nome do template (com extensao)
     while ((dica = yylex())){
@@ -38,17 +39,18 @@ int main (int argc, char* argv[]){
         }
         case CREATDIR:{
             if(dflag == 0){ //only used once
-                char* dir1 = strdup(nomefinal);
+                dir1 = strdup(nomefinal);
+                dir = strdup(dir1); // atualiza dir actual
                 strcat(dir1,"/");
                 mkdir(dir1, 0664);
             }
             if(dflag == 1){  
-                char* dir2 = strdup();
+                dir2 = strdup(dir);
                 strcat(dir2,"/");
                 mkdir(dir2, 0664);
             }
             if(dflag == 2){
-                char* dir3 = strdup(nomefinal);
+                dir3 = strdup(nomefinal);
                 strcat(dir3,"/");
                 mkdir(dir3, 0664);
             }
