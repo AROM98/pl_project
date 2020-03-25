@@ -3,6 +3,8 @@
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 //criar var global para o nome do projecto?
 
@@ -34,9 +36,24 @@ int main (int argc, char* argv[]){
             */
             break;
         }
-        case CREATDIR:
+        case CREATDIR:{
+            if(dflag == 0){ //only used once
+                char* dir1 = strdup(nomefinal);
+                strcat(dir1,"/");
+                mkdir(dir1, 0664);
+            }
+            if(dflag == 1){  
+                char* dir2 = strdup();
+                strcat(dir2,"/");
+                mkdir(dir2, 0664);
+            }
+            if(dflag == 2){
+                char* dir3 = strdup(nomefinal);
+                strcat(dir3,"/");
+                mkdir(dir3, 0664);
+            }
             break;
-
+        }
         case CREATFL:{
             char* filefl = strdup(nomefinal);
             strcat(filefl,".fl");

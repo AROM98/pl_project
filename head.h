@@ -13,6 +13,8 @@ char* nomefinal;
 char* email;
 char* autor;
 char buffer[1000];
+char* dir; //dir actual
+int dflag;
 
 
 #endif

@@ -29,6 +29,9 @@ README {printf("entrei no estado ReadME\n"); BEGIN readme;}
 
 
 <tree>=== {printf("vou sair de tree e voltar ao inicio\n"); BEGIN 0;}
+<tree>{qnamef}\/ {dir = strdup(nomefinal); printf("dir : %s\n",dir); dflag = 0; return CREATDIR;}
+<tree>\- {dflag = 1;}
+<tree>\-\- {dflag = 2;}
 <tree>.|\n ;
 
 <makefile>=== {printf("vou sair da makefile e voltar ao inicio\n"); BEGIN 0;}
