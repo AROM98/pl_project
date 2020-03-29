@@ -30,12 +30,19 @@ README {printf("entrei no estado ReadME\n"); BEGIN readme;}
 
 <tree>=== {printf("vou sair de tree e voltar ao inicio\n"); BEGIN 0;}
 <tree>{qnamef}\/ {dir = strdup(nomefinal); printf("dir : %s\n",dir); dflag = 0; return CREATDIR;}
-<tree>\- {dflag = 1;}
-<tree>\-\- {dflag = 2;}
+<tree>\-\ [a-z0-9]+\/ {dflag = 1; dir = strdup(yytext); return CREATDIR;}
+<tree>\-\ [a-zA-Z0-9]+(\.[a-z0-9]+)?$ {dflag = 3; dir = strdup(yytext); return CREATDIR;}
+<tree>\-\ {qnamef}\.[a-z0-9]+ {dflag = 3; dir = strdup(yytext); return CREATDIR;}
+
+<tree>\-\-\ [a-z0-9]+\/ {dflag = 2; dir = strdup(yytext); return CREATDIR;}
+<tree>\-\-\ [a-zA-Z0-9]+(\.[a-z0-9]+)?$ {dflag = 4; dir = strdup(yytext); return CREATDIR;}
+<tree>\-\-\ {qnamef}\.[a-z0-9]+ {dflag = 4; dir = strdup(yytext); return CREATDIR;}
+
 <tree>.|\n ;
 
-<makefile>=== {printf("vou sair da makefile e voltar ao inicio\n"); BEGIN 0;}
-<makefile>.|\n ;
+<makefile>=== {printf("vou sair da makefile e voltar ao inicio\n"); BEGIN 0; return CREATMAKE;}
+<makefile>{qnamef} {yytext = nomefinal; strcat(buffer, yytext);}
+<makefile>[^===] {strcat(buffer, yytext);}
 
 <filemd>=== {printf("vou sair de filemd e voltar ao inicio\n"); BEGIN 0; return CREATMD;}
 <filemd>{qnamef} {yytext = nomefinal; strcat(buffer, yytext);}

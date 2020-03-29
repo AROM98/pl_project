@@ -12,8 +12,11 @@ extern int yylex();
 
 int main (int argc, char* argv[]){
     nomefinal = strdup(argv[1]);
-    int dica;
-    char* dir1, dir2, dir3;
+    char* pathf = strdup(argv[1]);
+    strcat(pathf, "/");
+    int dica, dir_flag = 0, used = 0;
+    char* dir1[20];
+    char* ficheiro;
     //no qual argv[1] será o nome do projecto a criar
     // e argv[2] será o nome do template (com extensao)
     while ((dica = yylex())){
@@ -39,20 +42,47 @@ int main (int argc, char* argv[]){
         }
         case CREATDIR:{
             if(dflag == 0){ //only used once
-                dir1 = strdup(nomefinal);
-                dir = strdup(dir1); // atualiza dir actual
-                strcat(dir1,"/");
-                mkdir(dir1, 0664);
+                dir1[dir_flag] = strdup(nomefinal);
+                //dir = strdup(dir1); // atualiza dir actual
+                strcat(dir1[dir_flag],"/");
+                mkdir(dir1[dir_flag], 0777);
+                used++;
             }
-            if(dflag == 1){  
-                dir2 = strdup(dir);
-                strcat(dir2,"/");
-                mkdir(dir2, 0664);
+            if(dflag == 1){  //criar pasta no /{name}
+                dir_flag = used;
+                dir1[dir_flag] = strdup(pathf);
+                strcat(dir1[dir_flag], dir);
+                mkdir(dir1[dir_flag], 0777);
+                used++;
+                dir_flag = 0;
             }
-            if(dflag == 2){
-                dir3 = strdup(nomefinal);
-                strcat(dir3,"/");
-                mkdir(dir3, 0664);
+            if(dflag == 2){ // criar pasta no /{name}/coisa/(pasta a criar) . caso de --
+                dir_flag = used;
+                dir1[dir_flag] = strdup(dir1[dir_flag - 1]); // copia path da ultima pasta criada.
+                strcat(dir1[dir_flag], dir);
+                mkdir(dir1[dir_flag], 0777);
+                used++;
+                dir_flag = 0; // volta a origem.
+            }
+            if(dflag == 3){ // criar ficheiro em /{name} . caso -
+                ficheiro = strdup("touch ");
+                strcat(ficheiro, dir);
+                printf("1- %s\n", ficheiro);
+                //system(ficheiro);
+                //memset(ficheiro, 0, sizeof(ficheiro)); // limpar buffer
+            }
+            if(dflag == 4){ // criar ficheiro em /{name}/coisa/(ficheiro a criar) . caso de --
+                dir_flag = used - 1;
+                ficheiro = strdup("cd ");
+                strcat(ficheiro, dir1[dir_flag]);
+                printf("2- %s\n", ficheiro);
+                //system(ficheiro);
+                ficheiro = strdup("touch ");
+                strcat(ficheiro, dir);
+                printf("3- %s\n", ficheiro);
+                //system(ficheiro);
+                dir_flag = 0; // volta a origem.
+                //memset(ficheiro, 0, sizeof(ficheiro)); // limpar buffer
             }
             break;
         }
@@ -66,11 +96,21 @@ int main (int argc, char* argv[]){
             memset(buffer, 0, sizeof(char)*1000); // limpar buffer
             break;
         }
-        case CREATMAKE:
+        case CREATMAKE:{
+            printf("antes: %s\n", pathf);
+            char* filemake = strdup(pathf);
+            strcat(filemake, "Makefile1");
+            printf("depois: %s\n", filemake);
+            FILE *file = fopen(filemake, "w");
+            int results = fputs(buffer, file);
+            if (results == EOF) printf("deu merda!\n");
+            fclose(file);
+            memset(buffer, 0, sizeof(char)*1000); // limpar buffer
             break;
-        
+        }
         case CREATREADME:{
-            FILE *file = fopen("ReadME.txt", "w");
+
+            FILE *file = fopen("xica/ReadMe.txt", "w+");
             int results = fputs(buffer, file);
             if (results == EOF) printf("deu merda!\n");
             fclose(file);
