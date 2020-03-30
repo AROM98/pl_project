@@ -88,40 +88,9 @@ int main (int argc, char* argv[]){
         }
         */
         case CREATFICH:{
+            /* CRIA/ESCREVE todos os ficheiros */
             printf("criar ficheiro: %s\n", nomefich);
             FILE *file = fopen(nomefich, "w");
-            int results = fputs(buffer, file);
-            if (results == EOF) printf("deu merda!\n");
-            fclose(file);
-            memset(buffer, 0, sizeof(char)*1000); // limpar buffer
-            break;
-        }
-
-        case CREATFL:{
-            char* filefl = strdup(nomefinal);
-            strcat(filefl,".fl");
-            FILE *file = fopen(filefl, "w");
-            int results = fputs(buffer, file);
-            if (results == EOF) printf("deu merda!\n");
-            fclose(file);
-            memset(buffer, 0, sizeof(char)*1000); // limpar buffer
-            break;
-        }
-        case CREATMAKE:{
-            printf("antes: %s\n", pathf);
-            char* filemake = strdup(pathf);
-            strcat(filemake, "Makefile1");
-            printf("depois: %s\n", filemake);
-            FILE *file = fopen(filemake, "w");
-            int results = fputs(buffer, file);
-            if (results == EOF) printf("deu merda!\n");
-            fclose(file);
-            memset(buffer, 0, sizeof(char)*1000); // limpar buffer
-            break;
-        }
-        case CREATREADME:{
-
-            FILE *file = fopen("xica/ReadMe.txt", "w+");
             int results = fputs(buffer, file);
             if (results == EOF) printf("deu merda!\n");
             fclose(file);

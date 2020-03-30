@@ -13,6 +13,6 @@ lex.yy.c: base.l
 	flex base.l
 
 clean:
-	rm lex.yy.c finalx *.o *.fl *.md ReadME.txt head.h.gch
+	rm lex.yy.c finalx *.o *.fl *.md ReadME.txt head.h.gch Makefile1 README
 
 

@@ -65,6 +65,7 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
 
 
 <ficheiro>=== {printf("vou sair do FICHEIRO e voltar ao inicio\n"); BEGIN 0; return CREATFICH;}
+<ficheiro><<EOF>> {return CREATFICH;}
 <ficheiro>{qnamef} {yytext = nomefinal; strcat(buffer, yytext);}
 <ficheiro>{qemail} {yytext = email; strcat(buffer, yytext);}
 <ficheiro>{qautor} {yytext = autor; strcat(buffer, yytext);}
