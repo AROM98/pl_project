@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include "head.h"
 #include <stdio.h>
 #include <string.h>
@@ -5,6 +6,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <glib.h>
 
 //criar var global para o nome do projecto?
 
@@ -101,7 +103,9 @@ int main (int argc, char* argv[]){
             break;
         }
     }
-    
+    /*
+    Escrever nso ficheiros certos??
+    */
     printf("nome do programa: %s\n", argv[1]);
     printf("autor -> %s\n", autor);
     printf("email -> %s\n", email);
