@@ -7,6 +7,7 @@
 #define CREATFL 102
 #define CREATMAKE 103
 #define CREATREADME 104
+#define CREATFICH 105
 
 //vars partilhadas
 char* nomefinal;
@@ -16,5 +17,8 @@ char buffer[1000];
 char* dir; //dir tmp
 int dflag;
 
+// para criaçao dos ficheiros
+char* nomefich;
+char* extensao;
 
 #endif

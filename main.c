@@ -39,7 +39,7 @@ int main (int argc, char* argv[]){
             close(new);
             */
             break;
-        }
+        }/*
         case CREATDIR:{
             if(dflag == 0){ //only used once
                 dir1[dir_flag] = strdup(nomefinal);
@@ -86,6 +86,17 @@ int main (int argc, char* argv[]){
             }
             break;
         }
+        */
+        case CREATFICH:{
+            printf("criar ficheiro: %s\n", nomefich);
+            FILE *file = fopen(nomefich, "w");
+            int results = fputs(buffer, file);
+            if (results == EOF) printf("deu merda!\n");
+            fclose(file);
+            memset(buffer, 0, sizeof(char)*1000); // limpar buffer
+            break;
+        }
+
         case CREATFL:{
             char* filefl = strdup(nomefinal);
             strcat(filefl,".fl");
