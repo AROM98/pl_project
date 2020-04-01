@@ -26,8 +26,13 @@ char* buffer;
 <readme><<EOF>> {printf("README para terminar\n"); return CREATREADME;}
 <readme>.* {strcat(buffer, yytext);}
 
+FLAGS EM TREE 
+- 0 PASTA INICIAL 
+- 1 PASTAS EM GERAL
+- 2 FICHEIROS EM GERAL
 
 */
+int i = 0;
 %}
 %x meta tree makefile filemd filelex readme ficheiro
 qnamef \{\%name\%\}
@@ -52,15 +57,11 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
 <meta>.|\n ;
 
 
-<tree>=== {printf("vou sair de tree e voltar ao inicio\n"); BEGIN 0;}
-<tree>{qnamef}\/ {dir = strdup(nomefinal); printf("dir : %s\n",dir); dflag = 0; return CREATDIR;}
-<tree>\-\ [a-z0-9]+\/ {dflag = 1; dir = strdup(yytext); return CREATDIR;}
-
-<tree>\-+\ [a-zA-Z0-9]+\/ {dflag = 1; dir = strdup(yytext); return CREATDIR;}
-
-<tree>\-\ [a-zA-Z0-9]+(\.[a-z0-9]+)?$ {dflag = 3; dir = strdup(yytext); return CREATDIR;}
-<tree>\-\ {qnamef}\.[a-z0-9]+ {dflag = 3; dir = strdup(yytext); return CREATDIR;}
-
+<tree>=== {printf("vou sair de tree e voltar ao inicio\n"); BEGIN 0; return CREATDIR;}
+<tree>{qnamef}\/ {dir = strdup(nomefinal); printf("dir : %s\n",dir); dflag = 0; tree[i] = strdup(dir); i++;}
+<tree>\-+\ [a-zA-Z0-9]+\/ {dflag = 1; dir = strdup(yytext); printf("dir : %s\n",dir); tree[i++] = strdup(dir);}
+<tree>\-+\ [a-zA-Z0-9]+(\.[a-z0-9]+)?$ {dflag = 2; dir = strdup(yytext);  printf("dir : %s\n",dir); tree[i++] = strdup(dir);}
+<tree>\-+\ {qnamef}\.[a-z0-9]+ {dflag = 2; dir = strdup(yytext); printf("dir : %s\n",dir); tree[i++] = strdup(dir);}
 <tree>.|\n ;
 
 
