@@ -15,10 +15,17 @@ char* dir; //dir tmp
 int dflag;
 
 //para a tree
-char** tree;
+typedef char* tree[50];
 
 // para criaçao dos ficheiros
 char* nomefich;
 char* extensao;
 
+int contatracos(char* string);
+void putinTree(tree t, char* string, int i);
+void createfich(char* nome, char* tmp, tree t);
+
 #endif
+
+
+

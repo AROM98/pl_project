@@ -22,5 +22,3 @@ lex.yy.c: base.l
 
 clean:
 	rm lex.yy.c finalx *.o *.fl *.md Makefile1 README
-
-

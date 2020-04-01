@@ -1,7 +1,15 @@
 %{
-#include <string.h>
 #include "head.h"
-/*char* email;
+#include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <stdlib.h>
+
+/*
+char* email;
 char* nome;
 char* buffer;
 
@@ -26,15 +34,14 @@ char* buffer;
 <readme><<EOF>> {printf("README para terminar\n"); return CREATREADME;}
 <readme>.* {strcat(buffer, yytext);}
 
-FLAGS EM TREE 
-- 0 PASTA INICIAL 
-- 1 PASTAS EM GERAL
-- 2 FICHEIROS EM GERAL
-
 */
 int i = 0;
+char* cona[50];
+tree arvore;
+char* path;
+char* tmppath;
 %}
-%x meta tree makefile filemd filelex readme ficheiro
+%x meta tree ficheiro
 qnamef \{\%name\%\}
 qemail \{\%email\%\}
 qautor \{\%author\%\}
@@ -43,10 +50,17 @@ qautor \{\%author\%\}
 === ;
 meta {printf("entrei no estado meta\n"); BEGIN meta;}
 tree {printf("entrei no estado tree\n"); BEGIN tree;}
-[a-zA-Z0-9]+\.[a-zA-Z0-9]+ {printf("entrei no estado ficheiro\n"); nomefich = strdup(yytext); BEGIN ficheiro;}
-[a-zA-Z0-9]+ {printf("entrei no estado ficheiro\n"); nomefich = strdup(yytext); BEGIN ficheiro;}
+[a-zA-Z0-9]+\.[a-zA-Z0-9]+ {printf("entrei no estado ficheiro\n"); 
+                            nomefich = strdup(yytext); 
+                            path = strdup(arvore[contatracos(tmppath)]);
+                            BEGIN ficheiro;}
+[a-zA-Z0-9]+ {printf("entrei no estado ficheiro\n"); nomefich = strdup(yytext); 
+              path = strdup(arvore[contatracos(tmppath)]);
+              BEGIN ficheiro;}
 {qnamef}\.[a-zA-Z0-9]+ {printf("entrei no estado ficheiro\n"); extensao = strdup(yytext + 8);
-                nomefich = strdup(nomefinal); strcat(nomefich, extensao); BEGIN ficheiro;}
+                nomefich = strdup(nomefinal); strcat(nomefich, extensao); 
+                path = strdup(arvore[contatracos(tmppath)]);
+                BEGIN ficheiro;}
 
 
 <meta>=== {printf("vou sair de meta e voltar ao inicio\n"); BEGIN 0;}
@@ -57,25 +71,53 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
 <meta>.|\n ;
 
 
-<tree>=== {printf("vou sair de tree e voltar ao inicio\n"); BEGIN 0; return CREATDIR;}
-<tree>{qnamef}\/ {dir = strdup(nomefinal); printf("dir : %s\n",dir); dflag = 0; tree[i] = strdup(dir); i++;}
-<tree>\-+\ [a-zA-Z0-9]+\/ {dflag = 1; dir = strdup(yytext); printf("dir : %s\n",dir); tree[i++] = strdup(dir);}
-<tree>\-+\ [a-zA-Z0-9]+(\.[a-z0-9]+)?$ {dflag = 2; dir = strdup(yytext);  printf("dir : %s\n",dir); tree[i++] = strdup(dir);}
-<tree>\-+\ {qnamef}\.[a-z0-9]+ {dflag = 2; dir = strdup(yytext); printf("dir : %s\n",dir); tree[i++] = strdup(dir);}
+<tree>=== {printf("vou sair de tree e voltar ao inicio\n"); BEGIN 0;}
+<tree>{qnamef}\/ {dir = strdup(nomefinal); strcat(dir, "/"); printf("dir : %s\n",dir);
+                  cona[i++] = strdup(dir); putinTree(arvore, dir, 0); tmppath = strdup(dir);}
+<tree>\-+\ [a-zA-Z0-9]+\/ {dir = strdup(yytext); printf("dir : %s com %d traços\n", dir, contatracos(dir)); 
+                           cona[i++] = strdup(dir); putinTree(arvore, dir, contatracos(dir));
+                           tmppath = strdup(dir);}
+<tree>\-+\ [a-zA-Z0-9]+(\.[a-z0-9]+)?$ {dflag = 2; dir = strdup(yytext);
+                                        printf("dir : %s com %d traços\n", dir, contatracos(dir));
+                                        cona[i++] = strdup(dir); tmppath = strdup(dir);}
+<tree>\-+\ {qnamef}\.[a-z0-9]+ {dflag = 2; dir = strdup(yytext); 
+                                printf("dir : %s com %d traços\n", dir, contatracos(dir));
+                                cona[i++] = strdup(dir); tmppath = strdup(dir);}
+
 <tree>.|\n ;
 
 
-<ficheiro>=== {printf("vou sair do FICHEIRO e voltar ao inicio\n"); BEGIN 0; return CREATFICH;}
-<ficheiro><<EOF>> {return CREATFICH;}
-<ficheiro>{qnamef} {yytext = nomefinal; strcat(buffer, yytext);}
-<ficheiro>{qemail} {yytext = email; strcat(buffer, yytext);}
-<ficheiro>{qautor} {yytext = autor; strcat(buffer, yytext);}
-<ficheiro>[^===] {strcat(buffer, yytext);}
+
+<ficheiro>=== {printf("vou sair do FICHEIRO e voltar ao inicio\n");
+               printf("%s  %s\n", nomefich, tmppath);
+               createfich(nomefich, tmppath, arvore);
+               BEGIN 0;}
+<ficheiro><<EOF>> {createfich(nomefich, tmppath, arvore);}
+<ficheiro>{qnamef} {yytext = nomefinal; strcat(buffer, yytext); }
+<ficheiro>{qemail} {yytext = email; strcat(buffer, yytext); }
+<ficheiro>{qautor} {yytext = autor; strcat(buffer, yytext); }
+<ficheiro>[^===] {strcat(buffer, yytext); }
 
 
 %%
 
+// putinTree(tree, dir, contatracos(dir));
 
+int main(int argc, char* argv[]){
+    nomefinal = strdup(argv[1]); 
+    printf("hello world\n");
+    printf("nome do programa é: %s\n", argv[1]);
+    yylex();
+    for(int i = 0; cona[i]; i++){
+        printf("%s\n", cona[i]);
+    }
+    printf("agora o array de paths das pastas\n");
+    for(int i = 0; arvore[i]; i++){
+        printf("%s\n", arvore[i]);
+    }
+    printf("%d\n", contatracos("coisas/"));
+    return 0;
+}
 
 
 
