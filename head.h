@@ -17,6 +17,7 @@ int dflag;
 //para a tree
 typedef char* tree[50];
 
+typedef GHashTable* tabela;
 
 
 // para criaçao dos ficheiros

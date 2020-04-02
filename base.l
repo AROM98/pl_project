@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <stdlib.h>
+#include <glib.h>
 
 /*
 char* email;
@@ -46,7 +47,9 @@ tree arvore;
 char* path;
 char* tmppath;
 
+tabela coisa;
 
+int m;
 
 %}
 %x meta tree ficheiro
@@ -92,7 +95,7 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
                                         cona[i++] = strdup(dir); }
 <tree>\-+\ {qnamef}\.[a-z0-9]+ {dflag = 2; dir = strdup(yytext); 
                                 printf("dir : %s com %d traços\n", dir, contatracos(dir));
-                                cona[i++] = strdup(dir); 
+                                cona[i++] = strdup(dir);
                                 }
 
 <tree>.|\n ;
@@ -113,8 +116,10 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
 
 // putinTree(tree, dir, contatracos(dir));
 // createfich(nomefich, tmppath, arvore);
+//tabela  coisa = g_hash_table_new(g_str_hash, g_str_equal);
 
 int main(int argc, char* argv[]){
+    coisa = g_hash_table_new(g_str_hash, g_str_equal);
     nomefinal = strdup(argv[1]);
     yyin = fopen(argv[2], "r");
     printf("hello world\n");
@@ -127,6 +132,9 @@ int main(int argc, char* argv[]){
     for(int i = 0; arvore[i]; i++){
         printf("%s\n", arvore[i]);
     }
+    printf("There are %d keys in the hash table\n",
+        g_hash_table_size(coisa));
+    printf("%d\n", m);
     return 0;
 }
 
