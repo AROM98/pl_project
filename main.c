@@ -48,3 +48,13 @@ void createfich(char* nome, char* tmp, tree t){
         system("cd ..");
     }
 }
+
+
+gint my_compare(gconstpointer a,gconstpointer b){
+    const char *cha = a;
+    const char *chb = b;
+    return strcmp(cha,chb);
+}
+
+
+
