@@ -104,7 +104,8 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
 // putinTree(tree, dir, contatracos(dir));
 
 int main(int argc, char* argv[]){
-    nomefinal = strdup(argv[1]); 
+    nomefinal = strdup(argv[1]);
+    yyin = fopen(argv[2], "r");
     printf("hello world\n");
     printf("nome do programa é: %s\n", argv[1]);
     yylex();
