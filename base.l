@@ -41,7 +41,7 @@ printf("ficherio: %s -> %s -> %s\n", nomefich, tmppath, path);
 GHashTable* coisa = g_hash_table_new (g_str_hash, g_str_equal);
 
 */
-int i = 0;
+int i = 0, tracos;
 char* cona[50];
 tree arvore;
 char* path;
@@ -83,19 +83,34 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
 
 
 <tree>=== {printf("vou sair de tree e voltar ao inicio\n"); BEGIN 0;}
-<tree>[a-zA-Z0-9]+\/ {dir = strdup(yytext); printf("dir : %s\n",dir);
-                  cona[i++] = strdup(dir); putinTree(arvore, dir, 0); }
-<tree>{qnamef}\/ {dir = strdup(nomefinal); strcat(dir, "/"); printf("dir : %s\n",dir);
-                  cona[i++] = strdup(dir); putinTree(arvore, dir, 0); }
-<tree>\-+\ [a-zA-Z0-9]+\/ {dir = strdup(yytext); printf("dir : %s com %d traços\n", dir, contatracos(dir)); 
+<tree>[a-zA-Z0-9]+\/ {printf("init ler linha1\n");
+                      dir = strdup(yytext); printf("dir : %s\n",dir);
+                      cona[i++] = strdup(dir); putinTree(arvore, dir, 0); 
+                      printf("end ler linha1\n");}
+<tree>{qnamef}\/ {printf("init ler linha2\n");
+                  dir = strdup(nomefinal); strcat(dir, "/"); printf("dir : %s\n",dir);
+                  cona[i++] = strdup(dir); putinTree(arvore, dir, 0);
+                  printf("end ler linha2\n");}
+<tree>\-+\ [a-zA-Z0-9]+\/ {printf("init ler linha3\n");
+                           dir = strdup(yytext); printf("dir : %s com %d traços\n", dir, contatracos(dir)); 
                            cona[i++] = strdup(dir); putinTree(arvore, dir, contatracos(dir));
+                           printf("end ler linha3\n");
                            }
-<tree>\-+\ [a-zA-Z0-9]+(\.[a-z0-9]+)?$ {dflag = 2; dir = strdup(yytext);
+<tree>\-+\ [a-zA-Z0-9]+(\.[a-z0-9]+)?$ {printf("init ler linha4\n");
+                                        dir = strdup(yytext);
                                         printf("dir : %s com %d traços\n", dir, contatracos(dir));
-                                        cona[i++] = strdup(dir); }
-<tree>\-+\ {qnamef}\.[a-z0-9]+ {dflag = 2; dir = strdup(yytext); 
+                                        cona[i++] = strdup(dir);
+                                        printf("end ler linha4\n"); }
+<tree>\-+\ {qnamef}\.[a-z0-9]+ {printf("init ler linha5\n");
+                                dir = strdup(yytext); 
                                 printf("dir : %s com %d traços\n", dir, contatracos(dir));
+                                tracos = contatracos(dir);
                                 cona[i++] = strdup(dir);
+                                path = strdup(arvore[tracos - 1]);
+                                tmppath = strdup(dir + tracos + 1);
+                                strcat(path, tmppath);
+                                
+                                printf("end ler linha5\n");
                                 }
 
 <tree>.|\n ;
@@ -117,6 +132,8 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
 // putinTree(tree, dir, contatracos(dir));
 // createfich(nomefich, tmppath, arvore);
 //tabela  coisa = g_hash_table_new(g_str_hash, g_str_equal);
+
+//g_hash_table_insert (coisa, nomefich, path);
 
 int main(int argc, char* argv[]){
     coisa = g_hash_table_new(g_str_hash, g_str_equal);
