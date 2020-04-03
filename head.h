@@ -30,8 +30,6 @@ void createfich(char* nome, char* tmp, tree t);
 
 char* STRCAT (char* dest, const char* src);
 
+char *strdup(const char *str);
 
 #endif
-
-
-
