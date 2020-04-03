@@ -100,7 +100,12 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
                                         dir = strdup(yytext);
                                         printf("dir : %s com %d traços\n", dir, contatracos(dir));
                                         cona[i++] = strdup(dir);
-                                        printf("end ler linha4\n"); }
+                                        strcpy(path, arvore[tracos - 1]);
+                                        tmppath = strdup(dir + tracos + 1);
+                                        strcat(path, tmppath);
+                                        g_hash_table_insert (coisa, tmppath, path);
+                                        printf("end ler linha4\n");
+                                        }
 <tree>\-+\ {qnamef}\.[a-z0-9]+ {printf("init ler linha5\n");
                                 dir = strdup(yytext); 
                                 printf("dir : %s com %d traços\n", dir, contatracos(dir));
