@@ -57,4 +57,11 @@ gint my_compare(gconstpointer a,gconstpointer b){
 }
 
 
+char* STRCAT (char* dest, const char* src){
+    strcpy (dest + strlen (dest), src);
+    return dest;
+}
+//libc_hidden_builtin_def (strcat)
+
+
 

@@ -28,6 +28,8 @@ int contatracos(char* string);
 void putinTree(tree t, char* string, int i);
 void createfich(char* nome, char* tmp, tree t);
 
+char* STRCAT (char* dest, const char* src);
+
 
 #endif
 

@@ -44,7 +44,7 @@ GHashTable* coisa = g_hash_table_new (g_str_hash, g_str_equal);
 int i = 0, tracos;
 char* cona[50];
 tree arvore;
-char* path;
+char path[10240];
 char* tmppath;
 
 tabela coisa;
@@ -107,7 +107,7 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
                                 tracos = contatracos(dir);
                                 cona[i++] = strdup(dir);
                                 printf("ERRO1?\n");
-                                path = strdup(arvore[tracos - 1]);
+                                strcpy(path, arvore[tracos - 1]);
                                 printf("ERRO2? -> %s\n", path);
                                 tmppath = strdup(nomefinal);
                                 strcat(tmppath, dir + tracos + 9);
@@ -118,7 +118,6 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
                                 printf("end ler linha5\n");
                                 printf("There are %d keys in the hash table\n",g_hash_table_size(coisa));
                                 }
-
 <tree>.|\n ;
 
 
