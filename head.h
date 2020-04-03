@@ -26,7 +26,7 @@ char* extensao;
 
 int contatracos(char* string);
 void putinTree(tree t, char* string, int i);
-void createfich(char* nome, char* tmp, tree t);
+void createfich(char* nome, char* path);
 
 char* STRCAT (char* dest, const char* src);
 

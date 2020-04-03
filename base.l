@@ -61,14 +61,14 @@ qautor \{\%author\%\}
 === ;
 meta {printf("entrei no estado meta\n"); BEGIN meta;}
 tree {printf("entrei no estado tree\n"); BEGIN tree;}
-[a-zA-Z0-9]+\.[a-zA-Z0-9]+ {printf("entrei no estado ficheiro\n"); 
+[a-zA-Z0-9]+\.[a-zA-Z0-9]+ {printf("entrei no estado ficheiro1\n"); 
                             nomefich = strdup(yytext);
                             
                             BEGIN ficheiro;}
-[a-zA-Z0-9]+ {printf("entrei no estado ficheiro\n"); nomefich = strdup(yytext); 
+[a-zA-Z0-9]+ {printf("entrei no estado ficheiro2\n"); nomefich = strdup(yytext); 
               
               BEGIN ficheiro;}
-{qnamef}\.[a-zA-Z0-9]+ {printf("entrei no estado ficheiro\n"); extensao = strdup(yytext + 8);
+{qnamef}\.[a-zA-Z0-9]+ {printf("entrei no estado ficheiro3\n"); extensao = strdup(yytext + 8);
                 nomefich = strdup(nomefinal); strcat(nomefich, extensao); 
                 
                 BEGIN ficheiro;}
@@ -99,10 +99,15 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
 <tree>\-+\ [a-zA-Z0-9]+(\.[a-z0-9]+)?$ {printf("init ler linha4\n");
                                         dir = strdup(yytext);
                                         printf("dir : %s com %d traços\n", dir, contatracos(dir));
+                                        tracos = contatracos(dir);
                                         cona[i++] = strdup(dir);
+                                        printf("ERRO1?\n");
                                         strcpy(path, arvore[tracos - 1]);
+                                        printf("ERRO2? -> %s\n", path);
                                         tmppath = strdup(dir + tracos + 1);
+                                        printf("ERRO2? -> %s\n", tmppath);
                                         strcat(path, tmppath);
+                                        printf("ERRO2? -> %s\n", path);
                                         g_hash_table_insert (coisa, tmppath, path);
                                         printf("end ler linha4\n");
                                         }
@@ -128,9 +133,12 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
 
 
 <ficheiro>=== {printf("vou sair do FICHEIRO e voltar ao inicio\n");
-               
+               printf("nome do ficheiro a procurar: %s\n", nomefich);
+               printf("encontrei file %s em %s\n", nomefich, g_hash_table_lookup(coisa, nomefich));
                BEGIN 0;}
-<ficheiro><<EOF>> {return 0;}
+<ficheiro><<EOF>> {printf("nome do ficheiro a procurar: %s\n", nomefich);
+                   printf("encontrei file %s em %s\n", nomefich, g_hash_table_lookup(coisa, nomefich));
+                   return 0;}
 <ficheiro>{qnamef} {yytext = nomefinal; strcat(buffer, yytext); }
 <ficheiro>{qemail} {yytext = email; strcat(buffer, yytext); }
 <ficheiro>{qautor} {yytext = autor; strcat(buffer, yytext); }
@@ -161,6 +169,8 @@ int main(int argc, char* argv[]){
     }
     printf("There are %d keys in the hash table\n",g_hash_table_size(coisa));
     printf("%d\n", m);
+    printf("There are %d keys in the hash table\n",g_hash_table_size(coisa));
+    GList* lista = g_hash_table_get_values(coisa);
     return 0;
 }
 

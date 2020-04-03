@@ -32,21 +32,21 @@ void putinTree(tree t, char* string, int i){
     mkdir(t[i], 0777);
 }
 
-void createfich(char* nome, char* tmp, tree t){
-    char* paath = "cd ";
-    int v = contatracos(tmp);
-    strcat(paath, t[v - 1]);
-    printf("system -> %s\n", paath);
-    system(paath);
+void createfich(char* nome, char* path){
+    //char* paath = "cd ";
+    //int v = contatracos(tmp);
+    //strcat(paath, t[v - 1]);
+    //printf("system -> %s\n", paath);
+    //system(paath);
     printf("criar ficheiro: %s\n", nome);
     FILE *file = fopen(nome, "w");
     int results = fputs(buffer, file);
     if (results == EOF) printf("deu merda!\n");
     fclose(file);
     memset(buffer, 0, sizeof(char)*1000); // limpar buffer
-    for(int i = 0; i < v; i++){
-        system("cd ..");
-    }
+    //for(int i = 0; i < v; i++){
+    //    system("cd ..");
+    //}
 }
 
 
