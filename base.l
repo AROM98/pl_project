@@ -108,7 +108,8 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
                                         printf("ERRO2? -> %s\n", tmppath);
                                         strcat(path, tmppath);
                                         printf("ERRO2? -> %s\n", path);
-                                        g_hash_table_insert (coisa, tmppath, path);
+                                        printf("vou por na hash: %s -> %s\n", tmppath, path);
+                                        g_hash_table_insert (coisa, strdup(tmppath), strdup(path));
                                         printf("end ler linha4\n");
                                         }
 <tree>\-+\ {qnamef}\.[a-z0-9]+ {printf("init ler linha5\n");
@@ -124,7 +125,8 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
                                 printf("ERRO3? -> %s\n", tmppath);
                                 strcat(path, tmppath);
                                 printf("ERRO4? -> %s\n", path);
-                                g_hash_table_insert (coisa, tmppath, path);
+                                printf("vou por na hash: %s -> %s\n", tmppath, path);
+                                g_hash_table_insert (coisa, strdup(tmppath), strdup(path));
                                 printf("end ler linha5\n");
                                 printf("There are %d keys in the hash table\n",g_hash_table_size(coisa));
                                 }
@@ -169,8 +171,6 @@ int main(int argc, char* argv[]){
     }
     printf("There are %d keys in the hash table\n",g_hash_table_size(coisa));
     printf("%d\n", m);
-    printf("There are %d keys in the hash table\n",g_hash_table_size(coisa));
-    GList* lista = g_hash_table_get_values(coisa);
     return 0;
 }
 
