@@ -137,9 +137,11 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
 <ficheiro>=== {printf("vou sair do FICHEIRO e voltar ao inicio\n");
                printf("nome do ficheiro a procurar: %s\n", nomefich);
                printf("encontrei file %s em %s\n", nomefich, g_hash_table_lookup(coisa, nomefich));
+               createfich(nomefich, g_hash_table_lookup(coisa, nomefich));
                BEGIN 0;}
 <ficheiro><<EOF>> {printf("nome do ficheiro a procurar: %s\n", nomefich);
                    printf("encontrei file %s em %s\n", nomefich, g_hash_table_lookup(coisa, nomefich));
+                   createfich(nomefich, g_hash_table_lookup(coisa, nomefich));
                    return 0;}
 <ficheiro>{qnamef} {yytext = nomefinal; strcat(buffer, yytext); }
 <ficheiro>{qemail} {yytext = email; strcat(buffer, yytext); }

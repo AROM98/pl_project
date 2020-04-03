@@ -38,8 +38,8 @@ void createfich(char* nome, char* path){
     //strcat(paath, t[v - 1]);
     //printf("system -> %s\n", paath);
     //system(paath);
-    printf("criar ficheiro: %s\n", nome);
-    FILE *file = fopen(nome, "w");
+    printf("criar ficheiro: %s em %s\n", nome, path);
+    FILE *file = fopen(path, "w");
     int results = fputs(buffer, file);
     if (results == EOF) printf("deu merda!\n");
     fclose(file);
