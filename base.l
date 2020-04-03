@@ -106,11 +106,17 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
                                 printf("dir : %s com %d traços\n", dir, contatracos(dir));
                                 tracos = contatracos(dir);
                                 cona[i++] = strdup(dir);
+                                printf("ERRO1?\n");
                                 path = strdup(arvore[tracos - 1]);
-                                tmppath = strdup(dir + tracos + 1);
+                                printf("ERRO2? -> %s\n", path);
+                                tmppath = strdup(nomefinal);
+                                strcat(tmppath, dir + tracos + 9);
+                                printf("ERRO3? -> %s\n", tmppath);
                                 strcat(path, tmppath);
-                                
+                                printf("ERRO4? -> %s\n", path);
+                                g_hash_table_insert (coisa, tmppath, path);
                                 printf("end ler linha5\n");
+                                printf("There are %d keys in the hash table\n",g_hash_table_size(coisa));
                                 }
 
 <tree>.|\n ;
@@ -149,8 +155,7 @@ int main(int argc, char* argv[]){
     for(int i = 0; arvore[i]; i++){
         printf("%s\n", arvore[i]);
     }
-    printf("There are %d keys in the hash table\n",
-        g_hash_table_size(coisa));
+    printf("There are %d keys in the hash table\n",g_hash_table_size(coisa));
     printf("%d\n", m);
     return 0;
 }
