@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <glib.h>
 
+
 int contatracos(char* string){
     int res = 0;
     for(int i = 0; string[i]; i++){
@@ -19,8 +20,9 @@ int contatracos(char* string){
     return res;
 }
 
+//para por na estura chamada de tree (nao é uma arvore)
 void putinTree(tree t, char* string, int i){
-    int n;
+    int n, res;
     char* tmp;
     if(i > 0){
         n = i - 1;
@@ -29,24 +31,19 @@ void putinTree(tree t, char* string, int i){
     }
     else tmp = strdup(string);
     t[i] = strdup(tmp);
-    mkdir(t[i], 0777);
+    res = mkdir(t[i], 0777);
+    if(res == 0) printf("%s ... OK\n", t[i]);
+    else printf("ERRO tentar criar ou já existe %s\n", t[i]);
 }
 
 void createfich(char* nome, char* path){
-    //char* paath = "cd ";
-    //int v = contatracos(tmp);
-    //strcat(paath, t[v - 1]);
-    //printf("system -> %s\n", paath);
-    //system(paath);
-    printf("criar ficheiro: %s em %s\n", nome, path);
+    //printf("criar ficheiro: %s em %s\n", nome, path);
     FILE *file = fopen(path, "w");
     int results = fputs(buffer, file);
-    if (results == EOF) printf("deu merda!\n");
+    if (results == EOF) printf("ERRO tentar criar %s\n", nome);
+    else printf("%s ... OK\n", nome);
     fclose(file);
-    memset(buffer, 0, sizeof(char)*1000); // limpar buffer
-    //for(int i = 0; i < v; i++){
-    //    system("cd ..");
-    //}
+    memset(buffer, 0, sizeof(char)*1000); // limpar buffer 
 }
 
 
@@ -61,7 +58,7 @@ char* STRCAT (char* dest, const char* src){
     strcpy (dest + strlen (dest), src);
     return dest;
 }
-//libc_hidden_builtin_def (strcat)
+
 
 char *strdup(const char *str)
 {

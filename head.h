@@ -1,18 +1,14 @@
 #ifndef _HEAD
 #define _ HEAD 1
 #include <glib.h>
-//estas definiçoes aqui é um exemplo de como podemos usar
 
-#define CREATDIR 101
-#define CREATFICH 105
-
-//vars partilhadas
+//meta dados
 char* nomefinal;
 char* email;
 char* autor;
 char buffer[1000];
 char* dir; //dir tmp
-int dflag;
+
 
 //para a tree
 typedef char* tree[50];

@@ -9,38 +9,6 @@
 #include <stdlib.h>
 #include <glib.h>
 
-/*
-char* email;
-char* nome;
-char* buffer;
-
-<tree>\-\-\ [a-z0-9]+\/ {dflag = 2; dir = strdup(yytext); return CREATDIR;}
-<tree>\-\-\ [a-zA-Z0-9]+(\.[a-z0-9]+)?$ {dflag = 4; dir = strdup(yytext); return CREATDIR;}
-<tree>\-\-\ {qnamef}\.[a-z0-9]+ {dflag = 4; dir = strdup(yytext); return CREATDIR;}
-
-
-<makefile>=== {printf("vou sair da makefile e voltar ao inicio\n"); BEGIN 0; return CREATMAKE;}
-<makefile>{qnamef} {yytext = nomefinal; strcat(buffer, yytext);}
-<makefile>[^===] {strcat(buffer, yytext);}
-
-<filemd>=== {printf("vou sair de filemd e voltar ao inicio\n"); BEGIN 0; return CREATMD;}
-<filemd>{qnamef} {yytext = nomefinal; strcat(buffer, yytext);}
-<filemd>{qemail} {yytext = email; strcat(buffer, yytext);}
-<filemd>{qautor} {yytext = autor; strcat(buffer, yytext);}
-<filemd>[^===] {strcat(buffer, yytext);}
-
-<filelex>=== {printf("vou sair de filelex e voltar ao inicio\n"); BEGIN 0; return CREATFL;}
-<filelex>[^===] {strcat(buffer, yytext);}
-
-<readme><<EOF>> {printf("README para terminar\n"); return CREATREADME;}
-<readme>.* {strcat(buffer, yytext);}
-
-path = strdup(arvore[contatracos(tmppath) - 1]);
-printf("ficherio: %s -> %s -> %s\n", nomefich, tmppath, path);
-
-GHashTable* hashTable = g_hash_table_new (g_str_hash, g_str_equal);
-
-*/
 int i = 0, tracos;
 char* pathDir[50];
 tree arvore;
@@ -48,8 +16,6 @@ char path[10240];
 char* tmppath;
 
 tabela hashTable;
-
-int m;
 
 %}
 %x meta tree ficheiro
@@ -59,21 +25,18 @@ qautor \{\%author\%\}
 %%
     BEGIN 0;
 === ;
-meta {printf("entrei no estado meta\n"); BEGIN meta;}
-tree {printf("entrei no estado tree\n"); BEGIN tree;}
-[a-zA-Z0-9]+\.[a-zA-Z0-9]+ {printf("entrei no estado ficheiro1\n");
-                            nomefich = strdup(yytext);
+meta {BEGIN meta;}
+tree {BEGIN tree;}
+[a-zA-Z0-9]+\.[a-zA-Z0-9]+ {nomefich = strdup(yytext);
                             BEGIN ficheiro;}
-
-[a-zA-Z0-9]+ {printf("entrei no estado ficheiro2\n"); nomefich = strdup(yytext);
+[a-zA-Z0-9]+ {nomefich = strdup(yytext);
               BEGIN ficheiro;}
-
-{qnamef}\.[a-zA-Z0-9]+ {printf("entrei no estado ficheiro3\n"); extensao = strdup(yytext + 8);
+{qnamef}\.[a-zA-Z0-9]+ {extensao = strdup(yytext + 8);
                 nomefich = strdup(nomefinal); strcat(nomefich, extensao);
                 BEGIN ficheiro;}
 
 
-<meta>=== {printf("vou sair de meta e voltar ao inicio\n"); BEGIN 0;}
+<meta>=== {BEGIN 0;}
 <meta>email:\ ([a-z0-9]+\.)*[a-z0-9]+@([a-z0-9]+\.)+[a-z]+ {email = strdup(yytext+7);
                                                             printf("seu email é: %s\n", email);}
 <meta>author:\ ([a-zA-Z|ç|ã|á|à|â|é]+(\.|\ )*)+ {autor = strdup(yytext+8);
@@ -81,66 +44,40 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
 <meta>.|\n ;
 
 
-<tree>=== {printf("vou sair de tree e voltar ao inicio\n"); BEGIN 0;}
-<tree>[a-zA-Z0-9]+\/ {printf("init ler linha1\n");
-                      dir = strdup(yytext); printf("dir : %s\n",dir);
+<tree>=== {BEGIN 0;}
+<tree>[a-zA-Z0-9]+\/ {dir = strdup(yytext); printf("dir : %s\n",dir);
                       pathDir[i++] = strdup(dir); putinTree(arvore, dir, 0);
-                      printf("end ler linha1\n");}
-<tree>{qnamef}\/ {printf("init ler linha2\n");
-                  dir = strdup(nomefinal); strcat(dir, "/"); printf("dir : %s\n",dir);
+                      }
+<tree>{qnamef}\/ {dir = strdup(nomefinal); strcat(dir, "/");
                   pathDir[i++] = strdup(dir); putinTree(arvore, dir, 0);
-                  printf("end ler linha2\n");}
-<tree>\-+\ [a-zA-Z0-9]+\/ {printf("init ler linha3\n");
-                           dir = strdup(yytext); printf("dir : %s com %d traços\n", dir, contatracos(dir));
+                  }
+<tree>\-+\ [a-zA-Z0-9]+\/ {dir = strdup(yytext);
                            pathDir[i++] = strdup(dir); putinTree(arvore, dir, contatracos(dir));
-                           printf("end ler linha3\n");
                            }
-<tree>\-+\ [a-zA-Z0-9]+(\.[a-z0-9]+)?$ {printf("init ler linha4\n");
-                                        dir = strdup(yytext);
-                                        printf("dir : %s com %d traços\n", dir, contatracos(dir));
+<tree>\-+\ [a-zA-Z0-9]+(\.[a-z0-9]+)?$ {dir = strdup(yytext);
                                         tracos = contatracos(dir);
                                         pathDir[i++] = strdup(dir);
-                                        printf("ERRO1?\n");
                                         strcpy(path, arvore[tracos - 1]);
-                                        printf("ERRO2? -> %s\n", path);
                                         tmppath = strdup(dir + tracos + 1);
-                                        printf("ERRO2? -> %s\n", tmppath);
                                         strcat(path, tmppath);
-                                        printf("ERRO2? -> %s\n", path);
-                                        printf("vou por na hash: %s -> %s\n", tmppath, path);
                                         g_hash_table_insert (hashTable, strdup(tmppath), strdup(path));
-                                        printf("end ler linha4\n");
                                         }
-<tree>\-+\ {qnamef}\.[a-z0-9]+ {printf("init ler linha5\n");
-                                dir = strdup(yytext);
-                                printf("dir : %s com %d traços\n", dir, contatracos(dir));
+<tree>\-+\ {qnamef}\.[a-z0-9]+ {dir = strdup(yytext);
                                 tracos = contatracos(dir);
                                 pathDir[i++] = strdup(dir);
-                                printf("ERRO1?\n");
                                 strcpy(path, arvore[tracos - 1]);
-                                printf("ERRO2? -> %s\n", path);
                                 tmppath = strdup(nomefinal);
                                 strcat(tmppath, dir + tracos + 9);
-                                printf("ERRO3? -> %s\n", tmppath);
                                 strcat(path, tmppath);
-                                printf("ERRO4? -> %s\n", path);
-                                printf("vou por na hash: %s -> %s\n", tmppath, path);
                                 g_hash_table_insert (hashTable, strdup(tmppath), strdup(path));
-                                printf("end ler linha5\n");
-                                printf("There are %d keys in the hash table\n",g_hash_table_size(hashTable));
                                 }
 <tree>.|\n ;
 
 
 
-<ficheiro>=== {printf("vou sair do FICHEIRO e voltar ao inicio\n");
-               printf("nome do ficheiro a procurar: %s\n", nomefich);
-               printf("encontrei file %s em %s\n", nomefich, g_hash_table_lookup(hashTable, nomefich));
-               createfich(nomefich, g_hash_table_lookup(hashTable, nomefich));
+<ficheiro>=== {createfich(nomefich, g_hash_table_lookup(hashTable, nomefich));
                BEGIN 0;}
-<ficheiro><<EOF>> {printf("nome do ficheiro a procurar: %s\n", nomefich);
-                   printf("encontrei file %s em %s\n", nomefich, g_hash_table_lookup(hashTable, nomefich));
-                   createfich(nomefich, g_hash_table_lookup(hashTable, nomefich));
+<ficheiro><<EOF>> {createfich(nomefich, g_hash_table_lookup(hashTable, nomefich));
                    return 0;}
 <ficheiro>{qnamef} {yytext = nomefinal; strcat(buffer, yytext); }
 <ficheiro>{qemail} {yytext = email; strcat(buffer, yytext); }
@@ -156,14 +93,9 @@ tree {printf("entrei no estado tree\n"); BEGIN tree;}
 
 //g_hash_table_insert (hashTable, nomefich, path);
 
-int main(int argc, char* argv[]){
-    hashTable = g_hash_table_new(g_str_hash, g_str_equal);
-    nomefinal = strdup(argv[1]);
-    yyin = fopen(argv[2], "r");
-    printf("hello world\n");
-    printf("nome do programa é: %s\n", argv[1]);
-    yylex();
-    for(int i = 0; pathDir[i]; i++){
+/*
+
+for(int i = 0; pathDir[i]; i++){
         printf("%s\n", pathDir[i]);
     }
     printf("agora o array de paths das pastas\n");
@@ -171,6 +103,14 @@ int main(int argc, char* argv[]){
         printf("%s\n", arvore[i]);
     }
     printf("There are %d keys in the hash table\n",g_hash_table_size(hashTable));
-    printf("%d\n", m);
+
+*/
+
+int main(int argc, char* argv[]){
+    hashTable = g_hash_table_new(g_str_hash, g_str_equal);
+    nomefinal = strdup(argv[1]);
+    yyin = fopen(argv[2], "r");
+    printf("nome do programa é: %s\n", argv[1]);
+    yylex();
     return 0;
 }
