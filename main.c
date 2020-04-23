@@ -16,13 +16,12 @@ int contatracos(char* string){
         if(string[i] == '-'){
             res++;
         }
-        else break;
     }
     return res;
 }
 
 //para por na estura chamada de tree (nao é uma arvore)
-void guardapath(Array t, char* string, int i){
+void putinTree(tree t, char* string, int i){
     int n, res;
     char* tmp;
     if(i > 0){

@@ -11,7 +11,7 @@
 
 int i = 0, tracos;
 char* pathDir[50];
-Array path_store;
+tree arvore;
 char path[10240];
 char* tmppath;
 
@@ -45,27 +45,27 @@ tree {BEGIN tree;}
 
 
 <tree>=== {BEGIN 0;}
-<tree>^[a-zA-Z0-9\-\_]+\/$ {dir = strdup(yytext);
-                      pathDir[i++] = strdup(dir); guardapath(path_store, dir, 0);
+<tree>[a-zA-Z0-9]+\/ {dir = strdup(yytext); printf("dir : %s\n",dir);
+                      pathDir[i++] = strdup(dir); putinTree(arvore, dir, 0);
                       }
-<tree>^{qnamef}\/$ {dir = strdup(nomefinal); strcat(dir, "/");
-                  pathDir[i++] = strdup(dir); guardapath(path_store, dir, 0);
+<tree>{qnamef}\/ {dir = strdup(nomefinal); strcat(dir, "/");
+                  pathDir[i++] = strdup(dir); putinTree(arvore, dir, 0);
                   }
-<tree>^\-+\ [a-zA-Z0-9\-\_]+\/$ {dir = strdup(yytext);
-                           pathDir[i++] = strdup(dir); guardapath(path_store, dir, contatracos(dir));
+<tree>\-+\ [a-zA-Z0-9]+\/ {dir = strdup(yytext);
+                           pathDir[i++] = strdup(dir); putinTree(arvore, dir, contatracos(dir));
                            }
-<tree>^\-+\ [a-zA-Z0-9\-\_]+(\.[a-z0-9]+)?$ {dir = strdup(yytext);
+<tree>\-+\ [a-zA-Z0-9]+(\.[a-z0-9]+)?$ {dir = strdup(yytext);
                                         tracos = contatracos(dir);
                                         pathDir[i++] = strdup(dir);
-                                        strcpy(path, path_store[tracos - 1]);
+                                        strcpy(path, arvore[tracos - 1]);
                                         tmppath = strdup(dir + tracos + 1);
                                         strcat(path, tmppath);
                                         g_hash_table_insert (hashTable, strdup(tmppath), strdup(path));
                                         }
-<tree>^\-+\ {qnamef}\.[a-z0-9]+ {dir = strdup(yytext);
+<tree>\-+\ {qnamef}\.[a-z0-9]+ {dir = strdup(yytext);
                                 tracos = contatracos(dir);
                                 pathDir[i++] = strdup(dir);
-                                strcpy(path, path_store[tracos - 1]);
+                                strcpy(path, arvore[tracos - 1]);
                                 tmppath = strdup(nomefinal);
                                 strcat(tmppath, dir + tracos + 9);
                                 strcat(path, tmppath);
@@ -87,6 +87,24 @@ tree {BEGIN tree;}
 
 %%
 
+// putinTree(tree, dir, contatracos(dir));
+// createfich(nomefich, tmppath, arvore);
+//tabela  hashTable = g_hash_table_new(g_str_hash, g_str_equal);
+
+//g_hash_table_insert (hashTable, nomefich, path);
+
+/*
+
+for(int i = 0; pathDir[i]; i++){
+        printf("%s\n", pathDir[i]);
+    }
+    printf("agora o array de paths das pastas\n");
+    for(int i = 0; arvore[i]; i++){
+        printf("%s\n", arvore[i]);
+    }
+    printf("There are %d keys in the hash table\n",g_hash_table_size(hashTable));
+
+*/
 
 int main(int argc, char* argv[]){
     hashTable = g_hash_table_new(g_str_hash, g_str_equal);
