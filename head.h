@@ -11,7 +11,7 @@ char* dir; //dir tmp
 
 
 //para a tree
-typedef char* tree[50];
+typedef char* Array[50];
 
 typedef GHashTable* tabela;
 
@@ -21,7 +21,7 @@ char* nomefich;
 char* extensao;
 
 int contatracos(char* string);
-void putinTree(tree t, char* string, int i);
+void guardapath(Array t, char* string, int i);
 void createfich(char* nome, char* path);
 
 char* STRCAT (char* dest, const char* src);
